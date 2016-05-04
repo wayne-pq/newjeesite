@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cms.dao.LeaveWordsDao">
+
+
+	<resultMap type="com.thinkgem.jeesite.modules.cms.entity.LeaveWords"
+		id="LeaveWordsbase">
+		<id column="id" property="id" />
+		<result column="type" property="type" />
+		<result column="content" property="content" />
+		<result column="name" property="name" />
+		<result column="email" property="email" />
+		<result column="phone" property="phone" />
+		<result column="workunit" property="workunit" />
+		<result column="ip" property="ip" />
+		<result column="createDate" property="createDate" />
+		<result column="reDate" property="reDate" />
+		<result column="reContent" property="reContent" />
+		<result column="delFlag" property="delFlag" />
+	</resultMap>
+
+
+
+
+
+	<resultMap type="com.thinkgem.jeesite.modules.cms.entity.Reply"
+		id="replysmap">
+		<id column="ID" property="ID" />
+		<result column="COMMENT_ID" property="COMMENT_ID" />
+		<result column="CONTENT" property="CONTENT" />
+		<result column="REPLY_ID" property="REPLY_ID" />
+		<result column="IP" property="IP" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="ISFIRST" property="ISFIRST" />
+		<result column="BYREPLY_ID" property="BYREPLY_ID" />
+		<result column="DEL_FLAG" property="delFlag" />
+	</resultMap>
+
+
+
+
+
+
+
+
+	<resultMap type="com.thinkgem.jeesite.modules.cms.entity.LeaveWords"
+		id="LeaveWordsmap" extends="LeaveWordsbase">
+
+		<association property="reUser"
+			javaType="com.thinkgem.jeesite.modules.sys.entity.User">
+			<id column="reUser.id" property="id" />
+			<result column="reUser.name" property="name" />
+		</association>
+
+		<collection property="data" javaType="list"
+			ofType="com.thinkgem.jeesite.modules.cms.entity.LeaveWordsData">
+			<id column="leavewordid" property="leavewordid" />
+			<result column="data.imgs" property="imgs" />
+		</collection>
+
+	</resultMap>
+
+
+
+	<sql id="cmsleaveWordsColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.content AS "content",
+		a.name AS "name",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.workunit AS
+		"workunit",
+		a.ip AS "ip",
+		a.create_date AS "createDate",
+		a.re_user_id AS
+		"reUser.id",
+		a.re_date AS "reDate",
+		a.re_content AS "reContent",
+		a.del_flag AS "delFlag",
+		u.name AS "reUser.name",
+		c.imgs as "data.imgs"
+	</sql>
+
+
+	<sql id="cmsleaveWordsColumnsBase">
+		a.id AS "id",
+		a.type AS "type",
+		a.content AS "content",
+		a.name AS "name",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.workunit AS
+		"workunit",
+		a.ip AS "ip",
+		a.create_date AS "createDate",
+		a.re_user_id AS
+		"reUser.id",
+		a.re_date AS "reDate",
+		a.re_content AS "reContent",
+		a.del_flag AS "delFlag",
+		u.name AS "reUser.name"
+	</sql>
+
+	<sql id="cmsLeaveWordsJoins">
+		LEFT JOIN sys_user u ON u.id = a.re_user_id
+		LEFT JOIN
+		cms_leavewords_imgs c ON c.leavewordid = a.id
+	</sql>
+
+	<sql id="cmsLeaveWordsJoinsBase">
+		LEFT JOIN sys_user u ON u.id = a.re_user_id
+	</sql>
+
+	<!-- <select id="get" resultType="LeaveWords"> SELECT <include refid="cmsleaveWordsColumns"/> 
+		FROM cms_LeaveWords a <include refid="cmsLeaveWordsJoins"/> WHERE a.id = 
+		#{id} </select> -->
+
+	<select id="get" resultMap="LeaveWordsmap">
+		SELECT
+		<include refid="cmsleaveWordsColumns" />
+		FROM cms_LeaveWords a
+		<include refid="cmsLeaveWordsJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+
+	<select id="getReplys" resultMap="replysmap">
+		SELECT
+		ID,
+		COMMENT_ID,
+		CONTENT,
+		REPLY_ID,
+		IP,
+		CREATE_DATE,
+		ISFIRST,
+		BYREPLY_ID,
+		DEL_FLAG
+		FROM
+		cms_leavewords_reply a
+		<where>
+				<if test="isfirst != null">
+					and a.ISFIRST = #{isfirst}
+				</if>
+				<if test="comment_id != null">
+					and a.COMMENT_ID = #{comment_id}
+				</if>
+				<if test="id != null">
+					and a.ID = #{id}
+				</if>
+		</where>
+		order by a.isfirst desc,a.CREATE_DATE asc 
+	</select>
+
+	<select id="getReply" resultMap="replysmap">
+		SELECT
+		ID,
+		COMMENT_ID,
+		CONTENT,
+		REPLY_ID,
+		IP,
+		CREATE_DATE,
+		ISFIRST,
+		BYREPLY_ID,
+		DEL_FLAG
+		FROM
+		cms_leavewords_reply a
+		WHERE a.ID = #{id}
+	</select>
+
+
+	<select id="findList" resultType="LeaveWords">
+		SELECT
+		<include refid="cmsleaveWordsColumnsBase" />
+		FROM cms_LeaveWords a
+		<include refid="cmsLeaveWordsJoinsBase" />
+		<where>
+			a.del_flag = #{delFlag}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+
+	<select id="findAllList" resultType="LeaveWords">
+		SELECT
+		<include refid="cmsleaveWordsColumnsBase" />
+		FROM cms_LeaveWords a
+		<include refid="cmsLeaveWordsJoinsBase" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cms_LeaveWords(
+		id,
+		type,
+		content,
+		name,
+		email,
+		phone,
+		workunit,
+		ip,
+		create_date,
+		re_user_id,
+		re_date,
+		re_content,
+		del_flag
+		) VALUES (
+		#{id},
+		#{type},
+		#{content},
+		#{name},
+		#{email},
+		#{phone},
+		#{workunit},
+		#{ip},
+		#{createDate},
+		#{reUser.id},
+		#{reDate},
+		#{reContent},
+		#{delFlag}
+		)
+	</insert>
+
+
+
+
+
+	<insert id="insertReply">
+		INSERT INTO cms_leavewords_reply(
+		ID,
+		COMMENT_ID,
+		CONTENT,
+		REPLY_ID,
+		IP,
+		CREATE_DATE,
+		ISFIRST,
+		BYREPLY_ID,
+		AUDIT_USER_ID,
+		AUDIT_DATE,
+		DEL_FLAG
+		) VALUES (
+		#{ID},
+		#{COMMENT_ID},
+		#{CONTENT},
+		#{REPLY_ID},
+		#{IP},
+		#{createDate},
+		#{ISFIRST},
+		#{BYREPLY_ID},
+		#{auditUser.id},
+		#{auditDate},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cms_LeaveWords SET
+		type = #{type},
+		content =
+		#{content},
+		name = #{name},
+		email = #{email},
+		phone = #{phone},
+		workunit =
+		#{workunit},
+		ip = #{ip},
+		create_date = #{createDate},
+		re_user_id =
+		#{reUser.id},
+		re_date = #{reDate},
+		re_content = #{reContent},
+		del_flag =
+		#{delFlag}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE cms_LeaveWords SET
+		del_flag =
+		#{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="findByIdIn" resultType="LeaveWords">
+		SELECT
+		<include refid="cmsleaveWordsColumns" />
+		from cms_LeaveWords a where
+		<where>
+			id in ();
+		</where>
+	</select>
+
+</mapper>

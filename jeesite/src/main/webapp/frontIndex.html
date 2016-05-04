@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<!-- 保证零缓存 -->
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Cache-Control" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<title>主页</title>
+		<link rel="shortcut icon" href="./static/img/oak_header_icon.png" type="image/x-icon">
+		<script data-baseurl="./" data-main="./static/requirejs/config/require.config.js" src="./static/requirejs/require.js" id="main"></script>
+	</head>
+
+	<body class="sitesection-home">
+		<div class="site-wrapper has-sticky-footer">
+			<header class="header--home" id="header" role="banner">
+				<nav class="navbar" role="navigation">
+					<div class="container">
+
+						<div class="navbar-header">
+							<img class="site-branding" src="static/img/oak_logo.png"></img>
+							<a id="site-nav-toggle" class="site-nav-toggle"></a>
+						</div>
+
+						<div id="site-nav">
+							<nav role="navigation">
+								<ul class="navbar-nav navbar-nav--left">
+
+									<li class="nav-item-home active" id="nav_index"><a style="font-size: 15px;" href="#index">主页</a></li>
+
+									<!-- 登陆用户显示内容 -->
+									
+									<!-- <c:forEach items="${fnc:getMainNavList(site.id)}" var="category" varStatus="status">
+											<c:if test="${status.index lt 6}">
+												<c:set var="menuCategoryId" value=",${category.id}," />
+												<li class="nav-item-home ${requestScope.category.id eq category.id||fn:indexOf(requestScope.category.parentIds,menuCategoryId) ge 1? 'active':'' }"><a href="${category.url}" target="${category.target}" style="font-size: 15px;">${category.name}</a></li>
+											</c:if>
+										</c:forEach> -->
+										
+									<!-- 登陆用户显示内容 -->
+
+								</ul>
+								<ul class="navbar-nav navbar-nav--right">
+
+									<!-- 未登陆用户显示内容  -->
+									<li><a class="js-auth-trigger" data-initial="signin" style="font-size: 15px;">注册</a></li>
+									<li><a class="js-auth-trigger" style="font-size: 15px;" data-toggle="modal" data-target="#loginModal">登陆</a></li>
+									<!-- 未登陆用户显示内容  -->
+
+									<!-- 登陆用户显示内容 -->
+									<div class="uns_box">
+										<div class="menu">
+											<li id="i_menu_profile_btn" class="u-i i_user">
+												<a class="i-link"> <img class="i_face" src="static/img/head.jpg" />
+												</a>
+												<div id="i_menu_profile" class="i_menu" style="display: none;">
+													<div class="info clearfix">
+														<div class="uname">
+															<b>JJLin</b>
+														</div>
+													</div>
+												</div>
+											</li>
+										</div>
+									</div>
+								</ul>
+								<script>
+								</script>
+
+								<!-- 登陆用户显示内容 -->
+
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</nav>
+			</header>
+
+			<div id="content" ng-view></div>
+
+			<!-- Modal 登录框 -->
+			<div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="font-family: '微软雅黑'; opacity: 0.95;">
+				<div class="modal-dialog" role="document" style="transform: scale(0.88, 1)">
+					<div class="modal-content">
+						<div class="auth-box modal-pane-join">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+								<h4 class="modal-title" id="myModalLabel">登陆</h4>
+							</div>
+							<div class="modal-body">
+								<form id="loginForm" class="" novalidate="novalidate" role="form" action="/jeesite/login" method="post">
+									<div class="form-groups">
+
+										<input type="hidden" name="loginplace" id="loginplace" value="${fns:getFrontPath()}">
+										<div class="form-group ">
+											<label class="sr-only" for="username">用户名</label> <input type="text" id="username" name="username" class="form-control form-control--first">
+											<!-- <div id="usernameerror"></div> -->
+										</div>
+										<div class="form-group">
+											<label for="password" class="sr-only">密码</label> <input type="password" id="password" name="password" class="form-control">
+										</div>
+										<div class="form-group clearfix">
+
+											<div class="form-left">
+												<input type="text" id="validateCode" name="validateCode" maxlength="4" class="form-control" placeholder="验证码" />
+											</div>
+											<div class="form-right">
+												<img src="servlet/validateCodeServlet" onclick="$('.validateCodeImg').attr('src','servlet/validateCodeServlet?'+new Date().getTime());" class="ccap mid validateCodeImg" />
+											</div>
+
+											<!-- <sys:validateCode name="validateCode"
+											inputCssStyle="margin-bottom:0;" /> -->
+											&nbsp;&nbsp;
+										</div>
+
+										<!-- 			 <div class="control-group text-center">
+								<label for="rememberMe" title="下次不需要再登录" class="sr-only" ><input
+											type="checkbox" id="rememberMe" name="rememberMe"
+											${rememberMe ? 'checked' : ''} /> 记住我</label>
+
+									</div>
+							
+							</div>  -->
+								</form>
+								</div>
+
+							</div>
+							<div class="modal-footer" style="padding-right: 0px; padding-left: 0px">
+								<button id="formsubmit" class="btn btn-block btn-primary btn-submit" href="#">登陆</button>
+							</div>
+						</div>
+					</div>
+				</div>
+	</body>
+
+</html>

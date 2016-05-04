@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<!-- DailyRollingFileAppender -->
+	<appender name="DailyRollingFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="E:/jeesite日志/jeesite.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p [%c] - %m%n" />
+		</layout>
+		
+		 <filter class="com.thinkgem.jeesite.common.log.FrontGuestbookLogFilter">  
+            <param name="levelMin" value="DEBUG" />  
+            <param name="levelMax" value="ERROR" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+	</appender>
+
+	<!-- FrontGuestbookController -->
+	<appender name="FrontGuestbookController" class="org.apache.log4j.FileAppender">
+		<param name="File"
+			value="E:/jeesite日志/FrontGuestbookController-前台公共留言.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p [%c] - %m%n" />
+		</layout>
+		<!--过滤器设置输出的级别 -->
+		<filter class="com.thinkgem.jeesite.common.log.FrontGuestbookLogFilter">
+			<param name="levelMin" value="FrontGuestbook" />
+			<param name="levelMax" value="FrontGuestbook" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!-- Console -->
+	<appender name="Console" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p [%c] - %m%n" />
+		</layout>
+	</appender>
+
+
+	<!-- ===================================================================== -->
+	<!-- 日志写出器：每一个logger可以有多个输出目的地和输出方式 -->
+	<!-- 将名称为FrontGuestbook_logger的logger，输出到“FrontGuestbookController”的appender 
+		所谓logger的名字也就是，在定义Logger时，构造函数的参数 Logger log = Logger.getLogger("FrontGuestbook_logger"); -->
+	<!-- ===================================================================== -->
+	<!-- <logger name="FrontGuestbook_logger" additivity="false"> <level value="FrontGuestbook" 
+		/> <appender-ref ref="FrontGuestbookController" /> </logger> <logger name="DEBUG_logger" 
+		additivity="false"> <level value="WARN" /> <appender-ref ref="DailyRollingFileAppender" 
+		/> <appender-ref ref="Console" /> </logger> -->
+
+
+
+	<!-- category 输出指定类包中的日志 -->
+	<category name="com.thinkgem.jeesite">
+		<priority value="DEBUG" />
+	</category>
+	<category name="com.thinkgem.jeesite.common.security.shiro">
+		<priority value="WARN" />
+	</category>
+	<category name="com.thinkgem.jeesite.common.security.shiro">
+		<priority value="WARN" />
+	</category>
+	<category name="com.thinkgem.jeesite.common.security.shiro">
+		<priority value="WARN" />
+	</category>
+	<category name="com.thinkgem.jeesite.common.utils.JedisUtils">
+		<priority value="WARN" />
+	</category>
+	<category name="com.thinkgem.jeesite.modules.sys.web.LoginController">
+		<priority value="WARN" />
+	</category>
+	<category name="com.thinkgem.jeesite.modules.oa.dao.OaNotifyDao.findCount">
+		<priority value="WARN" />
+	</category>
+	<category
+		name="com.thinkgem.jeesite.modules.cms.web.front.FrontGuestbookController">
+		<priority value="FRONTGUESTBOOK" />
+	</category>
+
+
+
+	<!-- 根logger的设置 -->
+	<!-- ===================================================================== -->
+	<!-- Root logger 所有logger的基类，没有定义的logger将会使用root logger -->
+	<!-- ===================================================================== -->
+	<root>
+		<priority value="INFO" />
+		<appender-ref ref="FrontGuestbookController" />
+		<appender-ref ref="DailyRollingFileAppender" />
+		<appender-ref ref="Console" />
+	</root>
+</log4j:configuration>
