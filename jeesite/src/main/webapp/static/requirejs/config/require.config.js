@@ -24,10 +24,15 @@
 				'jquery-migrate': "static/jquery/jquery-migrate-1.1.1.min",
 				'jquery-validation': "static/jquery-validation/1.15.0/jquery.validate.min",
 				'jquery-validate-method': "static/jquery-validation/1.15.0/additional-methods.min",
+				'jquery-masonry': "static/bootstrap/jquery.masonry.min",
 				defult: "static/modules/cms/front/js/defult",
 				angularjs: "static/angularjs/angular-1.5.4/angular.min",
 				'angular-route': "static/angularjs/angular-1.5.4/angular-route",
-				'angular-route-cfg': "static/angularjs/angular-1.5.4/config/router-cfg-version"
+				'angular-route-cfg': "static/angularjs/angular-1.5.4/config/router-cfg-version",
+				ueditor:"static/ueditor/ueditor.all.min",
+				'ueditor-config':"static/ueditor/ueditor.config",
+				'ueditor-parse':"static/ueditor/ueditor.parse",
+				'ueditor-zn':"static/ueditor/lang/zh-cn/zh-cn"
 			},
 			shim: {
 				/*
@@ -50,12 +55,25 @@
 				'jquery-validate-method': {
 					deps: ["jquery", "jqueryvalidation"]
 				},
+				'jquery-masonry':{
+					deps: ['jquery']
+				},
 				angularjs: {
 					exports: 'angular'
 				},
 				'angular-route': {
 					deps: ['angularjs'], //依赖什么模块
 					exports: 'ngRouteModule'
+				},
+				'ueditor':{
+					deps: ['jquery','ueditor-config'],
+					exports: 'UE'
+				},
+				'ueditor-parse':{
+					deps: ['ueditor']
+				},
+				'ueditor-zn':{
+					deps: ['ueditor','ueditor-parse']
 				}
 			}
 		};

@@ -115,29 +115,30 @@ public class FrontController extends BaseController {
 
 		JSONObject json = new JSONObject();
 
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("<li class=\"nav-item-home active\" id=\"nav_index\"><a style=\"font-size: 15px;\" href=\"#index\">主页</a></li>\r\n");
+
 		if (SecurityUtils.getSubject().isAuthenticated()) {
 			List<Category> mainNavList = CmsUtils.getMainNavList("1");
 
-			StringBuffer buffer = new StringBuffer();
 			for (Category category : mainNavList) {
 				buffer.append("<li class=\"nav-item-home\"><a href=\""
-						+ category.getUrl() + "\" style=\"font-size: 15px;\">"
+						+ category.getHref() + "\" style=\"font-size: 15px;\">"
 						+ category.getName() + "</a></li>\r\n");
 			}
 
-			try {
-				logger.info("取得前台目录......");
-				json.put("flag", "success");
-				json.put("buffer", buffer);
-			} catch (Exception e) {
-				// 记录日志
-				logger.error(e.getMessage(), e);
-				json.put("flag", "fail");
-				json.put("msg", e.getMessage());
-			}
-			return json;
 		}
-		return null;
+		try {
+			logger.info("取得前台目录......");
+			json.put("flag", "success");
+			json.put("buffer", buffer);
+		} catch (Exception e) {
+			// 记录日志
+			logger.error(e.getMessage(), e);
+			json.put("flag", "fail");
+			json.put("msg", e.getMessage());
+		}
+		return json;
 	}
 
 	/**

@@ -14,8 +14,11 @@ define(['angularjs', 'requirejs', 'angular-route'], function (angular) {
 
             var routeMap = {
                 '/index': {                             //路由
-                    path: window.ctxStaticTpl+'frontTpl.js'         //模块的代码路径
-                    //controller: 'module2Controller'     //控制器名称
+                    path: window.ctxStaticTpl+'frontTpl.js',         //模块的代码路径
+                    controller: 'indexController'     //控制器名称
+                },
+                '/leavewords':{
+                	path: window.ctxStaticTpl+'frontLeaveWordsTpl.js'    
                 }/*,
                 '/leavewords': {                             //路由
                     path: 'static/modules/cms/front/tpl/frontIndex.js',         //模块的代码路径
@@ -38,6 +41,8 @@ define(['angularjs', 'requirejs', 'angular-route'], function (angular) {
             function requireModule(path, controller) {
                 return function ($route, $q) {
                     var deferred = $q.defer();
+                    //)用来undefine一个模块。它会重置loader的内部状态以使其忘记之前定义的一个模块。
+                    requirejs.undef(path);
                     require([path], function (ret) {
                         $controllerProvider.register(controller, ret.controller);
                         $route.current.template = ret.tpl;

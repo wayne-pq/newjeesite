@@ -1,6 +1,10 @@
 define(['jquery', 'angularjs', 'text!' + ctxStaticTpl + '/frontTpl.html', 'bootstrap', 'jquery-validation', 'css!static/modules/cms/front/css/site.min.css'], function($, angular, tpl) {
 
-	//根据权限拉取菜单
+	
+	$('#header').attr("class", "header--home");
+	
+	
+	// 根据权限拉取菜单
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
@@ -8,7 +12,14 @@ define(['jquery', 'angularjs', 'text!' + ctxStaticTpl + '/frontTpl.html', 'boots
 		dataType: 'json',
 		success: function(data) {
 			if (null != data && 　data.flag == "success") {
-				$("#site-nav #nav_index").after(data.buffer);
+				$("#site-nav").find(".navbar-nav--left").empty().append(data.buffer);
+				
+				//菜单active效果切换
+				$(".navbar-nav.navbar-nav--left").find("a").click(
+					function(){
+						$(".navbar-nav.navbar-nav--left").find("li").removeClass("active");
+						$(this).parent().addClass("active");
+				});
 			}
 		},
 		error: function(req, textStatus, errorThrown) {
@@ -21,14 +32,14 @@ define(['jquery', 'angularjs', 'text!' + ctxStaticTpl + '/frontTpl.html', 'boots
 		}
 	});
 
-	//登陆表单验证
+	// 登陆表单验证
 	$("#loginForm")
 		.validate({
-			//在input失去焦点时验证
+			// 在input失去焦点时验证
 			onfocusout: function(element) {
 				$(element).valid();
 			},
-			//在敲击键盘时验证
+			// 在敲击键盘时验证
 			onkeyup: false,
 			rules: {
 				username: "required",
@@ -67,10 +78,11 @@ define(['jquery', 'angularjs', 'text!' + ctxStaticTpl + '/frontTpl.html', 'boots
 						element[0].placeholder = error[0].firstChild.data;
 					}
 					/*  */
-					//error.insertAfter( element );
+					// error.insertAfter( element );
 				}
 
-				// Add the span element, if doesn't exists, and apply the icon classes to it.
+				// Add the span element, if doesn't exists, and apply the icon
+				// classes to it.
 				if (!element.next("span")[0]) {
 					if (element[0].id != "validateCode")
 						$("<span class='entypo entypo-cross form-control-feedback'></span>").insertAfter(element);
@@ -79,7 +91,8 @@ define(['jquery', 'angularjs', 'text!' + ctxStaticTpl + '/frontTpl.html', 'boots
 				}
 			},
 			success: function(label, element) {
-				// Add the span element, if doesn't exists, and apply the icon classes to it.
+				// Add the span element, if doesn't exists, and apply the icon
+				// classes to it.
 				if (!$(element).next("span")[0]) {
 					$("<span class='entypo entypo-check form-control-feedback'></span>").insertAfter($(element));
 				}
@@ -94,7 +107,7 @@ define(['jquery', 'angularjs', 'text!' + ctxStaticTpl + '/frontTpl.html', 'boots
 			}
 		});
 
-	$(document).keydown(function(e) { //键盘回车执行登录
+	$(document).keydown(function(e) { // 键盘回车执行登录
 		var evt = window.event ? window.event : e;
 		if (evt.keyCode === 13) {
 			$("#loginForm").submit();
@@ -119,11 +132,13 @@ define(['jquery', 'angularjs', 'text!' + ctxStaticTpl + '/frontTpl.html', 'boots
 			$('#i_menu_profile').attr("style", "display: none;");
 		})
 
-	//angular会自动根据controller函数的参数名，导入相应的服务
+	// angular会自动根据controller函数的参数名，导入相应的服务
 	return {
 		controller: function($scope, $routeParams, $http, $interval) {
-			console.log($routeParams); //获得路由中的参数
+			console.log($routeParams); // 获得路由中的参数
 			$scope.date = '2015-07-13';
+			$scope.modalinit = function() {
+			}
 		},
 		tpl: tpl
 	};

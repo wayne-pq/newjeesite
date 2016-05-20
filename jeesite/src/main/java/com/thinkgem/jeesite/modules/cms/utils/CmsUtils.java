@@ -89,7 +89,7 @@ public class CmsUtils {
 			Page<Category> page = new Page<Category>(1, -1);
 			page = categoryService.find(page, category);
 			mainNavList = page.getList();
-			CacheUtils.put(CMS_CACHE, "mainNavList_"+siteId, mainNavList);
+			//CacheUtils.put(CMS_CACHE, "mainNavList_"+siteId, mainNavList);
 		}
 		return mainNavList;
 	}
